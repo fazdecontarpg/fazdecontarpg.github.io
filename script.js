@@ -326,3 +326,102 @@ document.addEventListener('DOMContentLoaded', () => {
   updateParallax();
 });
 
+// ==========================================
+  // VALIDAÇÃO CRIPTOGRAFADA DE SENHA DE APOIADORES (CORRIGIDO)
+  // ==========================================
+
+  const supportersConfig = {
+    livro: {
+      title: "Apoiadores do Livro",
+      hash: "dfd35a587ae3ad60f1ad92ebf68e983cf5f849ff0850c9504a3f25b29db4cc4b",
+      driveUrl: "https://drive.google.com/drive/folders/1_D8Kh6WIWpuJY3xHs7egKE6PzcdFiTgc"
+    },
+    insetario: {
+      title: "Apoiadores do Insetário",
+      hash: "82a856beae7733dcfe5efcb4cfeb6f09bf2dd4f9c57650f9f30b9eeaa9ed084e",
+      driveUrl: "https://drive.google.com/drive/folders/1_D8Kh6WIWpuJY3xHs7egKE6PzcdFiTgc"
+    },
+    clube: {
+      title: "Clube Faz de Conta RPG",
+      hash: "6eefc4df35d1eafeef0680bf9cf7cb0cf2130e625d9cf8e11a6efcebeeb1ea84",
+      driveUrl: "https://drive.google.com/drive/folders/1_D8Kh6WIWpuJY3xHs7egKE6PzcdFiTgc"
+    }
+  };
+
+  // Função para converter texto em Hash SHA-256 (Normalizado em minúsculas)
+  async function hashSHA256(text) {
+    const cleanText = text.trim().toLowerCase(); // Remove espaços extras e converte para minúsculas
+    const encoder = new TextEncoder();
+    const data = encoder.encode(cleanText);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  const passwordModal = document.getElementById('passwordModal');
+  const closePasswordModal = document.getElementById('closePasswordModal');
+  const supporterModalTitle = document.getElementById('supporterModalTitle');
+  const supporterPasswordForm = document.getElementById('supporterPasswordForm');
+  const supporterPasswordInput = document.getElementById('supporterPasswordInput');
+  const passwordErrorMessage = document.getElementById('passwordErrorMessage');
+  const supporterBtns = document.querySelectorAll('.supporter-btn');
+
+  let activeSupporterType = null;
+
+  supporterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeSupporterType = btn.getAttribute('data-supporter-type');
+      const config = supportersConfig[activeSupporterType];
+
+      if (config) {
+        supporterModalTitle.textContent = config.title;
+        supporterPasswordInput.value = '';
+        passwordErrorMessage.textContent = '';
+        passwordModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        if (typeof playMagicSound === 'function') playMagicSound();
+      }
+    });
+  });
+
+  if (closePasswordModal && passwordModal) {
+    closePasswordModal.addEventListener('click', () => {
+      passwordModal.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    passwordModal.addEventListener('click', (e) => {
+      if (e.target === passwordModal) {
+        passwordModal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+  }
+
+  if (supporterPasswordForm) {
+    supporterPasswordForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const enteredPassword = supporterPasswordInput.value;
+      const config = supportersConfig[activeSupporterType];
+
+      if (!config) return;
+
+      const enteredHash = await hashSHA256(enteredPassword);
+
+      if (enteredHash === config.hash) {
+        passwordErrorMessage.style.color = '#2e8b57';
+        passwordErrorMessage.textContent = '✨ Senha correta! Redirecionando...';
+        if (typeof playMagicSound === 'function') playMagicSound();
+
+        setTimeout(() => {
+          passwordModal.classList.remove('active');
+          document.body.style.overflow = 'auto';
+          window.open(config.driveUrl, '_blank', 'noopener,noreferrer');
+        }, 800);
+      } else {
+        passwordErrorMessage.style.color = '#d9534f';
+        passwordErrorMessage.textContent = '❌ Senha incorreta. Tente novamente!';
+        supporterPasswordInput.select();
+      }
+    });
+  }

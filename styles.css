@@ -1192,7 +1192,7 @@ section {
    SEÇÃO ESCUDO DO MESTRE DIGITAL
    ========================================== */
 .master-screen-section {
-  background-color: #ffffff;
+  background-color: #fff9ed;
   border-bottom: 2px dashed #ebd4c1;
   padding: clamp(50px, 8vw, 90px) 20px;
 }

@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+
   // SINTETIZADOR DE EFEITOS SONOROS (Web Audio API)
   let audioCtx = null;
 
@@ -192,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 800);
   }
 
-  // 7. Modal de Apoiadores
+  // 7. Modal da Lista de Apoiadores
   const openModalBtn = document.getElementById('openSupportersModal');
   const closeModalBtn = document.getElementById('closeSupportersModal');
   const supportersModal = document.getElementById('supportersModal');
@@ -324,39 +325,32 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
   updateParallax();
-});
 
-// ==========================================
-  // VALIDAÇÃO CRIPTOGRAFADA DE SENHA DE APOIADORES (CORRIGIDO)
-  // ==========================================
+  // 10. ÁREA SEGURA DE APOIADORES (SHA-256 + SALTING ESTÁTICO)
+  
+  const SALT = "FazDeContaRPG_2026_SecretSalt_#Key!";
 
+  // Senhas padrão atuais:
+  // - Apoiadores do Livro: livro2026
+  // - Apoiadores do Insetário: insetario2026
+  // - Clube Faz de Conta RPG: clube2026
   const supportersConfig = {
     livro: {
       title: "Apoiadores do Livro",
-      hash: "dfd35a587ae3ad60f1ad92ebf68e983cf5f849ff0850c9504a3f25b29db4cc4b",
+      saltedHash: "0a53f656002f5a6b0c268c34dc41496a7aa8749d63c5c93540cf39a3e6a715f1",
       driveUrl: "https://drive.google.com/drive/folders/1_D8Kh6WIWpuJY3xHs7egKE6PzcdFiTgc"
     },
     insetario: {
       title: "Apoiadores do Insetário",
-      hash: "82a856beae7733dcfe5efcb4cfeb6f09bf2dd4f9c57650f9f30b9eeaa9ed084e",
+      saltedHash: "0235ad8aa25588ef2db44dcc655f2fe45ed8fcbcac2cb7dfec77b07db3aa6bf9",
       driveUrl: "https://drive.google.com/drive/folders/1_D8Kh6WIWpuJY3xHs7egKE6PzcdFiTgc"
     },
     clube: {
       title: "Clube Faz de Conta RPG",
-      hash: "6eefc4df35d1eafeef0680bf9cf7cb0cf2130e625d9cf8e11a6efcebeeb1ea84",
+      saltedHash: "6c2db6d1c8c93582103fca5f4625b1bd57fae136f2ca97fece9cb2bbd6313361",
       driveUrl: "https://drive.google.com/drive/folders/1_D8Kh6WIWpuJY3xHs7egKE6PzcdFiTgc"
     }
   };
-
-  // Função para converter texto em Hash SHA-256 (Normalizado em minúsculas)
-  async function hashSHA256(text) {
-    const cleanText = text.trim().toLowerCase(); // Remove espaços extras e converte para minúsculas
-    const encoder = new TextEncoder();
-    const data = encoder.encode(cleanText);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  }
 
   const passwordModal = document.getElementById('passwordModal');
   const closePasswordModal = document.getElementById('closePasswordModal');
@@ -379,7 +373,7 @@ document.addEventListener('DOMContentLoaded', () => {
         passwordErrorMessage.textContent = '';
         passwordModal.classList.add('active');
         document.body.style.overflow = 'hidden';
-        if (typeof playMagicSound === 'function') playMagicSound();
+        playMagicSound();
       }
     });
   });
@@ -398,20 +392,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Algoritmo nativo de Hash SHA-256 com suporte a Salting e Unicode Normalization
+  async function generateSaltedHash(password) {
+    const cleanPassword = password.normalize('NFKC').trim().toLowerCase();
+    const saltedInput = cleanPassword + SALT;
+    
+    // Web Crypto API nativa do navegador
+    if (window.crypto && window.crypto.subtle) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(saltedInput);
+      const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // Algoritmo de fallback se aberto sob protocolos muito restritos
+    let hash = 0;
+    for (let i = 0; i < saltedInput.length; i++) {
+      const char = saltedInput.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash |= 0;
+    }
+    return hash.toString();
+  }
+
   if (supporterPasswordForm) {
     supporterPasswordForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      
       const enteredPassword = supporterPasswordInput.value;
       const config = supportersConfig[activeSupporterType];
 
       if (!config) return;
 
-      const enteredHash = await hashSHA256(enteredPassword);
+      const enteredHash = await generateSaltedHash(enteredPassword);
 
-      if (enteredHash === config.hash) {
+      if (enteredHash === config.saltedHash) {
         passwordErrorMessage.style.color = '#2e8b57';
         passwordErrorMessage.textContent = '✨ Senha correta! Redirecionando...';
-        if (typeof playMagicSound === 'function') playMagicSound();
+        playMagicSound();
 
         setTimeout(() => {
           passwordModal.classList.remove('active');
@@ -425,3 +444,5 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+});

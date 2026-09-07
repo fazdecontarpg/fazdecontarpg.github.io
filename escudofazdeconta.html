@@ -2268,7 +2268,7 @@
 <div style="background: #fff; border: 1px solid var(--border-color); border-radius: 8px; padding: 18px; margin-bottom: 20px; box-shadow: inset 0 0 8px rgba(0,0,0,0.03);">
     <div id="mission-ai-narrative" style="font-size: 0.95rem; line-height: 1.7; color: var(--text-main);">
         <div style="font-family: 'Fredoka One', cursive; color: var(--bg-card-header); font-size: 1.1rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; border-bottom: 1px dashed var(--border-color); padding-bottom: 6px;">
-            📖 Missão detalhada
+            📖 Missão Detalhada
         </div>
         <em>Clique em "🎲 Gerar Nova Missão" para visualizar uma missão detalhada do Faz de Conta RPG.</em>
     </div>
@@ -3320,10 +3320,181 @@
             auxílio em mesa.</p>
     </footer>
 
-    <!-- LÓGICA PRINCIPAL DO GERADOR - APENAS O PADRÃO OFICIAL EXPANDIDO -->
     <script type="module">
 
-        // TABELAS PADRÃO DO GERADOR (2d6 / 1d6)
+        /* ====================================================== */
+        /* GERENCIADOR DE TRILHA SONORA & PLAYER AUDIO NATIVO      */
+        /* ====================================================== */
+
+        // CAMINHO PARA A PASTA LOCAL
+        const MUSIC_FOLDER = "./trilhasonora/"; 
+
+        // LISTA DE TODAS AS FAIXAS REGISTRADAS
+        const playlist = [
+            "1_1 Início da Aventura (Take 1).mp3",
+            "1_2 Início da Aventura (Take 2).mp3",
+            "2_1 Tema dos Pequenos Heróis (Versão A).mp3",
+            "2_2 Tema dos Pequenos Heróis (Versão B).mp3",
+            "3_1 Dia de Feira na Vila.mp3",
+            "3_2 Tarde na Cidade Pacata.mp3",
+            "3_3 Dia de Feira na Vila (Vibe Viva).mp3",
+            "4_1 Taverna Acolhedora.mp3",
+            "4_1 Taverna Animada.mp3",
+            "5_1 Floresta Encantada (Versão 1).mp3",
+            "5_2 Floresta Encantada (Versão 2).mp3",
+            "6_1 Trilha do Pântano Encantado.mp3",
+            "6_2 Floresta Sombria.mp3",
+            "6_3 Profundezas do Pântano Sombrio.mp3",
+            "6_4 Pântano Tenso.mp3",
+            "7_1 Campos Abertos Viagem.mp3",
+            "7_2 Na Estrada.mp3",
+            "8_1 Cumes Gelados_ O Desafio.mp3",
+            "8_2 Horizonte de Gelo.mp3",
+            "9_1 Ruínas de Areia (Místico e Seco) v1.mp3",
+            "9_2 Ruínas de Areia (Tribal).mp3",
+            "10_1 Corredores das Sombras.mp3",
+            "10_2 Dungeon - Sombras Profundas.mp3",
+            "10_3 Dungeon Tensa.mp3",
+            "11_1 Templo Antigo_ Ruínas Místicas.mp3",
+            "11_2 Conhecimento Esquecido.mp3",
+            "11_3 Eco do Conhecimento Antigo.mp3",
+            "12_1 Laboratório do Mago (Take 1).mp3",
+            "12_2 Laboratório do Mago (Take 2).mp3",
+            "13_1 A Corte de um Rei Bondoso.mp3",
+            "13_2 Segredos do Castelo Encantado.mp3",
+            "14_1 O Segredo do Castelo Antigo (Versão A).mp3",
+            "14_2 Pistas na Floresta Encantada (Versão B).mp3",
+            "15_1 Infiltração (Tiquetaque Mecânico).mp3",
+            "15_2 Infiltração no Castelo.mp3",
+            "16_1 Corrida no Castelo.mp3",
+            "16_2 Fuga pela Floresta Mágica.mp3",
+            "16_3 Fuga pela Floresta Mágica (Epic Drums Edit).mp3",
+            "16_4 Fuga pela Floresta Mágica (Frenético Mix).mp3",
+            "16_5 Corrida Épica.mp3",
+            "16_6 Fuga Épica.mp3",
+            "17_1 Batalha Leve.mp3",
+            "17_2 Confusão no Campo de Batalha.mp3",
+            "18_1 Coragem Contra o Perigo.mp3",
+            "18_2 Batalha dos Heróis_ O Grande Desafio.mp3",
+            "18_3 Coragem Contra o Perigo_ Power Edition.mp3",
+            "18_4 Sinfonia do Combate Épico.mp3",
+            "18_5 Lenda de Metal e Magia.mp3",
+            "19_1 The Final Stand.mp3",
+            "19_2 Steel and Sorcery_ Final Conflict.mp3",
+            "19_3 Blades of Destiny.mp3",
+            "20_1 O Despertar da Magia.mp3",
+            "20_2 Além dos Reinos Ocultos.mp3",
+            "20_3 Além dos Reinos Ocultos (Majestoso).mp3",
+            "21_1 O Último Brinde (The Last Toast).mp3",
+            "21_2 Promessa de Reencontro (Promise of Return).mp3",
+            "22_1 O Limiar da Descoberta.mp3",
+            "22_2 Revelando o Segredo.mp3",
+            "22_3 Revelando o Segredo (Lighter Vibe).mp3",
+            "23_1 Vitória na Vila - Celebração RPG.mp3",
+            "23_2 Recompensa do Herói - Fanfarra Festiva.mp3",
+            "23_3 Vitória na Vila - Edição Épica.mp3",
+            "24_1 A Escola de Magia (Tema do Reino).mp3",
+            "24_2 A Capital.mp3",
+            "24_3 Salões de Cristal.mp3",
+            "24_4 O Ritual das Sombras.mp3",
+            "24_5 Sussurros do Abismo.mp3",
+            "25_1 Trilha de Sonho.mp3",
+            "25_2 Mundo Onírico (Alternativa).mp3",
+            "26_1 Marcha do Tirano.mp3",
+            "26_2 Vilão_ Drama e Coro Épico.mp3",
+            "26_3 Vilão_ Instrumental Puro e Sombrio.mp3",
+            "27_1 O Descanso dos Heróis (Versão A).mp3",
+            "27_2 O Descanso dos Heróis (Versão B).mp3",
+            "27_3 Dever Cumprido e Felicidade (Upbeat).mp3",
+            "28_1 Tempestade Medieval.mp3",
+            "28_2 Chuva no Reino.mp3"
+        ];
+
+        let currentTrackIndex = 0;
+        let isLooping = false;
+
+        function playDriveTrack(fileName, displayTitle) {
+            const player = document.getElementById('main-audio-player');
+            const titleElement = document.getElementById('music-title');
+            const playPauseBtn = document.getElementById('btn-play-pause');
+
+            const foundIndex = playlist.indexOf(fileName);
+            if (foundIndex !== -1) {
+                currentTrackIndex = foundIndex;
+            }
+
+            const audioPath = MUSIC_FOLDER + encodeURIComponent(fileName);
+            player.src = audioPath;
+            if (titleElement) titleElement.innerText = "Tocando agora: " + displayTitle;
+
+            player.play().then(() => {
+                if (playPauseBtn) playPauseBtn.innerText = "⏸️ Pausar";
+            }).catch(err => {
+                console.warn("Aguardando interação do usuário:", err);
+                if (titleElement) titleElement.innerText = "Clique no Play do player para ouvir: " + displayTitle;
+            });
+        }
+
+        function togglePlayPause() {
+            const player = document.getElementById('main-audio-player');
+            const playPauseBtn = document.getElementById('btn-play-pause');
+
+            if (!player.src) {
+                playDriveTrack(playlist[0], playlist[0]);
+                return;
+            }
+
+            if (player.paused) {
+                player.play();
+                if (playPauseBtn) playPauseBtn.innerText = "⏸️ Pausar";
+            } else {
+                player.pause();
+                if (playPauseBtn) playPauseBtn.innerText = "▶️ Tocar";
+            }
+        }
+
+        function nextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+            const nextTrackName = playlist[currentTrackIndex];
+            playDriveTrack(nextTrackName, nextTrackName);
+        }
+
+        function previousTrack() {
+            currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+            const prevTrackName = playlist[currentTrackIndex];
+            playDriveTrack(prevTrackName, prevTrackName);
+        }
+
+        function toggleLoop() {
+            const player = document.getElementById('main-audio-player');
+            const loopBtn = document.getElementById('btn-loop');
+            isLooping = !isLooping;
+            player.loop = isLooping;
+            if (loopBtn) {
+                loopBtn.innerText = isLooping ? "🔁 Repetir: ON" : "🔁 Repetir: OFF";
+            }
+        }
+
+        // AVANÇA AUTOMATICAMENTE PARA A PRÓXIMA MÚSICA AO TERMINAR
+        document.addEventListener('DOMContentLoaded', () => {
+            const player = document.getElementById('main-audio-player');
+            if (player) {
+                player.addEventListener('ended', () => {
+                    if (!isLooping) {
+                        nextTrack();
+                    }
+                });
+            }
+        });
+window.playDriveTrack = playDriveTrack;
+        window.togglePlayPause = togglePlayPause;
+        window.nextTrack = nextTrack;
+        window.previousTrack = previousTrack;
+        window.toggleLoop = toggleLoop;
+        /* ====================================================== */
+        /* TABELAS E LÓGICA DO GERADOR DE MISSÕES                */
+        /* ====================================================== */
+
         const missionTables = {
             contato: {
                 2: { nome: "Mago Ancião", desc: "O Mago Zaimen precisa da ajuda dos heróis para resolver um problema importante." },
@@ -3363,7 +3534,6 @@
             }
         };
 
-        // ESTILOS DE MISSÃO E VALORES MORAIS
         const estilosValores = [
             { estilo: "Solidariedade e Ajuda ao Próximo", valor: "A verdadeira bravura está no cuidado e na proteção dos mais frágeis e necessitados." },
             { estilo: "Amizade e Cooperação", valor: "A união do grupo e a valorização das diferenças superam qualquer desafio difícil." },
@@ -3373,7 +3543,6 @@
             { estilo: "Estratégia Lúdica (Sem foco em combate)", valor: "Encontrar soluções criativas, distrair ou resgatar sem a necessidade de violência." }
         ];
 
-        // VARIABILIDADE DE DIÁLOGOS DOS NPCS
         const geradorDialogosVariados = {
             "Mago Ancião": [
                 "Crianças da Terra da Chuva Miúda, escutem atentamente! A chuva trazida pela nuvem do Reino dos Gigantes transformou os insetos da região. Os adultos da vila estão ocupados com os trabalhos pesados da colheita e manutenção, e muitos têm nojo de insetos. Mas vocês são corajosos e possuem o coração puro para resolver esta missão!",
@@ -3432,7 +3601,6 @@
             ]
         };
 
-        // LORE E DIRETRIAZES DE GRID POR LOCAL
         const geradorLocaisVariados = {
             "Vila Velha": [
                 {
@@ -3722,7 +3890,6 @@
             ]
         };
 
-        // TRIPLICAÇÃO DE LORE E TÁTICAS DE INIMIGOS
         const geradorInimigosVariados = {
             "Abelha e/ou Vespa": [
                 "Abelhas e Vespas Gigantes surgem zumbindo no ar e lançam projéteis de ferrão que causam o status de Paralisia! <em>Estratégia Mestre: Atacar e derrotar a Vespa ou Abelha Rainha faz com que as operárias restantes fujam do mapa imediatamente. Usem objetos como cobertura!</em>",
@@ -3788,7 +3955,7 @@
             return array[Math.floor(Math.random() * array.length)];
         }
 
-       // GERADOR DA FICHA UNIFICADA NO PADRÃO DE MISSÕES DE FAZ DE CONTA RPG
+        // GERADOR DA FICHA UNIFICADA NO PADRÃO DE MISSÕES DE FAZ DE CONTA RPG (BOX BRANCO ÚNICO)
         function generateOfficialRoteiro(contato, objetivo, local, inimigo, recompensa) {
             const listaDialogos = geradorDialogosVariados[contato.nome] || [`Pequenos heróis, precisamos de vocês para resolver a urgência de ${contato.desc.toLowerCase()}!`];
             const dialogo = getRandomItem(listaDialogos);
@@ -3810,7 +3977,7 @@
             return `
                 <div style="font-size: 0.96rem; line-height: 1.6; color: var(--text-main);">
                     <div style="font-family: 'Fredoka One', cursive; color: var(--bg-card-header); font-size: 1.2rem; margin-bottom: 8px; border-bottom: 2px solid var(--accent-gold); padding-bottom: 4px;">
-                       📖 Missão Detalhada
+                        Missão Detalhada
                     </div>
 
                     <p style="margin-bottom: 8px; font-size: 1rem;"><strong>Inimigo:</strong> ${inimigo}.</p>
@@ -3902,7 +4069,7 @@
             `;
             document.getElementById('mission-elaborated').innerHTML = elaboratedHTML;
 
-            // 4. BOX 3: PADRÃO EXATO DE FAZ DE CONTA RPG COM CONTEÚDO EXPANDIDO (ÚNICO)
+            // 4. BOX 3: PADRÃO EXATO DE FAZ DE CONTA RPG (SEM BOX VERDE DUPLO)
             const officialStory = generateOfficialRoteiro(contato, objetivo, local, inimigo, recompensaTxt);
             document.getElementById('mission-ai-narrative').innerHTML = officialStory;
         }

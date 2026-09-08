@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Personagem Digital - Faz de Conta RPG</title>
+    
+    <!-- Google Fonts importadas do Escudo do Mestre e do Site Oficial -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=Fredoka:wght@400;600;700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-page: #f2ebd9;
+            --bg-card: #fcf8f0;
+            --bg-card-header: #3a2212;
+            --text-main: #2b1d0c;
+            --text-light: #ffffff;
+            --accent-gold: #d4af37;
+            --accent-green: #2e5a27;
+            --accent-red: #8c231a;
+            --accent-blue: #1d4e89;
+            --accent-purple: #5c2c6d;
+            --border-color: #cbb892;
+            --border-dark: #5c3d22;
+            --shadow-soft: 0 4px 12px rgba(58, 34, 18, 0.15);
+            --shadow-card: 0 2px 6px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', 'Quicksand', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-page);
+            background-image: radial-gradient(#dfd3b6 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HEADER & BANNER TOP */
+        header {
+            background: linear-gradient(135deg, #2b180a 0%, #4a2d17 100%);
+            color: var(--text-light);
+            padding: 15px 20px;
+            border-bottom: 4px solid var(--accent-gold);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--accent-gold);
+        }
+
+        .logo-text h1 {
+            font-family: 'Fredoka One', 'Fredoka', cursive;
+            font-size: 1.8rem;
+            color: #f7e7c4;
+            text-shadow: 2px 2px 0 #120903;
+            line-height: 1.1;
+        }
+
+        .logo-text span {
+            font-size: 0.85rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            background: var(--accent-gold);
+            color: #2b180a;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            background: #e5be48;
+        }
+
+        .btn-purple {
+            background: var(--accent-purple);
+            color: white;
+        }
+
+        .btn-purple:hover {
+            background: #733987;
+        }
+
+        .btn-red {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .btn-red:hover {
+            background: #a32c22;
+        }
+
+        /* CONTAINER PRINCIPAL */
+        main {
+            max-width: 1200px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 15px 40px 15px;
+            flex: 1;
+        }
+
+        /* CARDS E CONTAINERS */
+        .card {
+            background: var(--bg-card);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow-card);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            color: #f7e7c4;
+            background: linear-gradient(90deg, var(--bg-card-header) 0%, #5c3a21 100%);
+            padding: 10px 16px;
+            border-radius: 8px;
+            margin: -18px -18px 16px -18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 5px solid var(--accent-gold);
+        }
+
+        /* GRID RESPONSIVO */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+        }
+
+        /* DADOS DO PERSONAGEM (INPUTS E SELECTS) */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            font-weight: 800;
+            font-size: 0.88rem;
+            color: var(--border-dark);
+            text-transform: uppercase;
+        }
+
+        input[type="text"], input[type="number"], select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: #ffffff;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus, select:focus, textarea:focus {
+            border-color: var(--accent-gold);
+        }
+
+        /* ATRIBUTOS COM PONTUADOR */
+        .attr-box {
+            background: #ffffff;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.03);
+        }
+
+        .attr-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1rem;
+            color: var(--bg-card-header);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .attr-value-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-counter {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: var(--bg-card-header);
+            color: var(--accent-gold);
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-counter:hover {
+            background: var(--accent-gold);
+            color: var(--bg-card-header);
+        }
+
+        .attr-input {
+            width: 50px !important;
+            text-align: center;
+            font-size: 1.2rem !important;
+            padding: 4px !important;
+        }
+
+        /* VIDA E RECURSOS CONTADORES */
+        .life-box {
+            background: #fff3f3;
+            border: 2px solid #e2a8a8;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .life-hearts {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 10px 0;
+            font-size: 1.8rem;
+            flex-wrap: wrap;
+        }
+
+        .heart {
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s;
+        }
+
+        .heart:hover {
+            transform: scale(1.2);
+        }
+
+        /* SEÇÃO DE DADOS INTERATIVO */
+        .dice-roller-box {
+            background: linear-gradient(135deg, #2e5a27 0%, #1e3d1a 100%);
+            color: white;
+            padding: 16px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .dice-display {
+            background: rgba(0, 0, 0, 0.35);
+            border: 2px dashed var(--accent-gold);
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3rem;
+            color: var(--accent-gold);
+            min-width: 140px;
+            text-align: center;
+        }
+
+        /* INVENTÁRIO & CARTAS DE TESOURO SELETOR */
+        .treasure-card-slot {
+            background: #fff;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .treasure-card-slot.madeira { border-left: 5px solid #8d6e63; }
+        .treasure-card-slot.ferro { border-left: 5px solid #78909c; }
+        .treasure-card-slot.ouro { border-left: 5px solid #ffca28; }
+
+        /* LISTA DE REGRAS E DICAS */
+        .rule-tip {
+            background: #f4ebd0;
+            border-left: 4px solid var(--accent-gold);
+            padding: 10px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+
+        /* FOOTER */
+        footer {
+            background: var(--bg-card-header);
+            color: #a8947d;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.85rem;
+            border-top: 3px solid var(--accent-gold);
+            margin-top: auto;
+        }
+
+        footer strong {
+            color: var(--accent-gold);
+        }
+
+        @media (max-width: 600px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo-text h1 {
+                font-size: 1.4rem;
+            }
+
+            .dice-roller-box {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER E LOGO DA FICHA -->
+    <header>
+        <div class="header-container">
+            <div class="logo-area">
+                <div class="logo-icon">🌳🗡️</div>
+                <div class="logo-text">
+                    <h1>FAZ DE CONTA RPG</h1>
+                    <span>Ficha de Personagem Digital</span>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <button class="btn" onclick="saveCharacter()">💾 Salvar</button>
+                <button class="btn btn-purple" onclick="exportJSON()">📤 Exportar</button>
+                <button class="btn" onclick="triggerImport()">📥 Importar</button>
+                <input type="file" id="import-file" style="display:none" onchange="importJSON(event)">
+                <button class="btn btn-red" onclick="resetForm()">🔄 Limpar</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- SELEÇÃO RÁPIDA DE CLASSES PREDEFINIDAS DO LIVRO (24 CLASSES) -->
+        <div class="card" style="border-color: var(--accent-gold); background: #fffdf8;">
+            <div class="card-header">
+                <span>✨ Carregar Classe Pré-definida do Livro de Regras</span>
+                <span style="font-size: 0.8rem; font-family: sans-serif; background: var(--accent-gold); color: #2b180a; padding: 2px 8px; border-radius: 10px;">24 Opções</span>
+            </div>
+            <p style="font-size: 0.9rem; margin-bottom: 10px;">Escolha uma das 24 classes clássicas de Faz de Conta RPG para preencher automaticamente os atributos, vida, perícia, alcance e habilidade especial!</p>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label for="preset-class-select">Selecione uma Classe Oficial:</label>
+                    <select id="preset-class-select" onchange="loadPresetClass()">
+                        <option value="">-- Selecione para Carregar Ficha Pronta --</option>
+                        <optgroup label="Classes de Combate e Ação">
+                            <option value="guerreiro">O Guerreiro (Espada Longa / Defensor)</option>
+                            <option value="amazona">A Amazona (Lâminas / Liderança)</option>
+                            <option value="barbaro">O Bárbaro (Machado Duplo / Músculos)</option>
+                            <option value="monge">O Monge (Artes Marciais / Foco)</option>
+                            <option value="samurai">O Samurai (Katana / Precisão)</option>
+                            <option value="defensora">A Defensora (Lança e Escudo / Proteção)</option>
+                        </optgroup>
+                        <optgroup label="Classes Mágicas e Espirituais">
+                            <option value="mago">O Mago (Elemento Mágico / Sabedoria)</option>
+                            <option value="elementalista">A Elementalista (Canalização Elemental)</option>
+                            <option value="druida">A Druida (Transformação Animal / Natureza)</option>
+                            <option value="alquimista">A Alquimista (Poções e Fórmulas)</option>
+                            <option value="paladino">O Paladino (Luz Sagrada / Justiça)</option>
+                            <option value="fada">A Fada (Asas / Varinha Encantada)</option>
+                        </optgroup>
+                        <optgroup label="Classes Distância e Agilidade">
+                            <option value="arqueiro">O Arqueiro (Arco e Flecha / Precisão)</option>
+                            <option value="cacadora">A Caçadora (Besta e Rastreio)</option>
+                            <option value="ninja">A Ninja (Shurikens / Furtividade)</option>
+                            <option value="vigilante">O Vigilante (Bastão Sentido Aguçado)</option>
+                        </optgroup>
+                        <optgroup label="Classes Artísticas e Criativas">
+                            <option value="bardo">O Bardo (Instrumento Mágico / Canções)</option>
+                            <option value="dancarina">A Dançarina (Passos Ágeis / Arte)</option>
+                            <option value="engenhoqueiro">O Engenhoqueiro (Invenções e Peças)</option>
+                            <option value="inventora">A Inventora (Cadeira Mecânica / Construção)</option>
+                        </optgroup>
+                        <optgroup label="Classes de Exploração e Vida no Campo">
+                            <option value="aventureiro">O Aventureiro (Versatilidade / Exploração)</option>
+                            <option value="exploradora">A Exploradora (Mapas e Expedições)</option>
+                            <option value="domador">O Domador (Companheiro Animal)</option>
+                            <option value="fazendeira">A Fazendeira (Recursos da Terra)</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="rule-tip">
+                    <strong>💡 Dica do Mago Zaimen:</strong> Você pode ajustar qualquer número ou texto manualmente após carregar uma classe!
+                </div>
+            </div>
+        </div>
+
+        <!-- ROLADOR DE DADOS DA FICHA -->
+        <div class="dice-roller-box">
+            <div>
+                <strong style="font-size: 1.1rem; color: var(--accent-gold); display: flex; align-items: center; gap: 6px;">
+                    🎲 Rolador de Dados Rápido (d6)
+                </strong>
+                <span style="font-size: 0.85rem; opacity: 0.9;">No Faz de Conta RPG, sucessos ocorrem rolando valor igual ou menor ao atributo!</span>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                <button class="btn" onclick="rollD6(1)">1d6 (Teste)</button>
+                <button class="btn" onclick="rollD6(2)">2d6 (Movimento)</button>
+                <div id="dice-result-output" class="dice-display">Resultado: -</div>
+            </div>
+        </div>
+
+        <!-- IDENTIFICAÇÃO DO PERSONAGEM -->
+        <div class="card">
+            <div class="card-header">
+                <span>📜 Identificação do Herói</span>
+                <i>👤</i>
+            </div>
+            <div class="grid-3">
+                <div class="form-group">
+                    <label for="char-name">Nome do Herói:</label>
+                    <input type="text" id="char-name" placeholder="Ex: Teté, Paulo, Ester...">
+                </div>
+                <div class="form-group">
+                    <label for="player-name">Jogador(a):</label>
+                    <input type="text" id="player-name" placeholder="Seu nome real">
+                </div>
+                <div class="form-group">
+                    <label for="char-class">Classe:</label>
+                    <input type="text" id="char-class" placeholder="Ex: Guerreiro, Fada, Mago...">
+                </div>
+            </div>
+        </div>
+
+        <!-- PAINEL DE VIDA E ATRIBUTOS -->
+        <div class="grid-2">
+            <!-- PONTOS DE VIDA & CONTADOR DE CORAÇÕES -->
+            <div class="card">
+                <div class="card-header">
+                    <span>❤️ Pontos de Vida (PV)</span>
+                    <span id="life-text-display" style="font-size: 0.9rem;">5 / 5</span>
+                </div>
+                <div class="life-box">
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 8px;">Clique nos corações para marcar/desmarcar o dano sofrido!</p>
+                    <div class="life-hearts" id="hearts-container">
+                        <!-- Gerado via JS -->
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
+                        <button class="btn btn-red" onclick="modifyLife(-1)">-1 PV</button>
+                        <button class="btn" style="background: var(--accent-green); color: white;" onclick="modifyLife(1)">+1 PV (Cura)</button>
+                    </div>
+                </div>
+                <div class="rule-tip">
+                    <strong>🩸 Regra de Lesão:</strong> Se perder todos os PVs, o herói apenas desmaia/cansa! Não há violência ou morte no jogo.
+                </div>
+            </div>
+
+            <!-- ATRIBUTOS PRINCIPAIS (SISTEMA 1d6) -->
+            <div class="card">
+                <div class="card-header">
+                    <span>📊 Atributos Principais (1d6)</span>
+                    <i>💪</i>
+                </div>
+                <div class="grid-2">
+                    <div class="attr-box">
+                        <div class="attr-title">👊 Força</div>
+                        <div class="attr-value-container">
+                            <button class="btn-counter" onclick="changeAttr('attr-forca', -1)">-</button>
+                            <input type="number" id="attr-forca" class="attr-input" value="3" min="1" max="6">
+                            <button class="btn-counter" onclick="changeAttr('attr-forca', 1)">+</button>
+                        </div>
+                        <span style="font-size: 0.72rem; color: #666;">Ataque físico e força</span>
+                    </div>
+
+                    <div class="attr-box">
+                        <div class="attr-title">🛡️ Defesa</div>
+                        <div class="attr-value-container">
+                            <button class="btn-counter" onclick="changeAttr('attr-defesa', -1)">-</button>
+                            <input type="number" id="attr-defesa" class="attr-input" value="2" min="1" max="6">
+                            <button class="btn-counter" onclick="changeAttr('attr-defesa', 1)">+</button>
+                        </div>
+                        <span style="font-size: 0.72rem; color: #666;">Evitar dano e esquiva</span>
+                    </div>
+
+                    <div class="attr-box">
+                        <div class="attr-title">🧠 Inteligência</div>
+                        <div class="attr-value-container">
+                            <button class="btn-counter" onclick="changeAttr('attr-inteligencia', -1)">-</button>
+                            <input type="number" id="attr-inteligencia" class="attr-input" value="2" min="1" max="6">
+                            <button class="btn-counter" onclick="changeAttr('attr-inteligencia', 1)">+</button>
+                        </div>
+                        <span style="font-size: 0.72rem; color: #666;">Enigmas, magia, achar pistas</span>
+                    </div>
+
+                    <div class="attr-box">
+                        <div class="attr-title">🏃 Movimento</div>
+                        <div style="font-weight: 800; font-size: 1.1rem; color: var(--accent-green); margin: 4px 0;">
+                            2d6 <span id="mov-bonus-text"></span>
+                        </div>
+                        <span style="font-size: 0.72rem; color: #666;">Rola 2d6 para mover no grid</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PERÍCIA, ALCANCE E HABILIDADE ESPECIAL -->
+        <div class="card">
+            <div class="card-header">
+                <span>⚔️ Perícia de Ataque & Habilidade Especial</span>
+                <i>✨</i>
+            </div>
+            <div class="grid-3">
+                <div class="form-group">
+                    <label for="pericia-nome">Perícia (Arma/Técnica):</label>
+                    <input type="text" id="pericia-nome" placeholder="Ex: Espada Longa, Varinha, Arco...">
+                </div>
+                <div class="form-group">
+                    <label for="pericia-alcance">Alcance (Quadrados):</label>
+                    <input type="number" id="pericia-alcance" value="1" min="1" max="12">
+                </div>
+                <div class="form-group">
+                    <label for="bolsa-max">Bolsa (Máx. Cartas de Tesouro):</label>
+                    <input type="number" id="bolsa-max" value="3" min="1" max="10">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="especial-desc">Habilidade Especial do Herói:</label>
+                <textarea id="especial-desc" rows="3" placeholder="Descreva a habilidade especial única do seu herói..."></textarea>
+            </div>
+        </div>
+
+        <!-- RECURSOS DA FICHA (XP E CHUVISCOS) -->
+        <div class="grid-2">
+            <!-- XP E PROGRESSO -->
+            <div class="card">
+                <div class="card-header">
+                    <span>⭐ Experiência (XP) & Conquistas</span>
+                    <i style="color: var(--accent-gold);">🏆</i>
+                </div>
+                <div class="grid-2" style="align-items: center; margin-bottom: 12px;">
+                    <div class="form-group">
+                        <label for="xp-total">Pontos de XP Totais:</label>
+                        <input type="number" id="xp-total" value="0" min="0" onchange="updateXPTitle()">
+                    </div>
+                    <div style="background: #fff; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); text-align: center;">
+                        <span style="font-size: 0.75rem; font-weight: bold; color: #666; display: block;">Título Atual de Conquista:</span>
+                        <strong id="xp-title-display" style="color: var(--accent-purple); font-size: 0.95rem;">Iniciante de Vila Velha</strong>
+                    </div>
+                </div>
+                <div class="rule-tip">
+                    <strong>⭐ Regra de XP:</strong> Cada inimigo derrotado que você causou pelo menos 1 de dano concede 1 XP a todos do grupo!
+                </div>
+            </div>
+
+            <!-- CHUVISCOS (MOEDA OFICIAL) -->
+            <div class="card">
+                <div class="card-header">
+                    <span>💧 Chuvisco\$ (Moeda Oficial)</span>
+                    <i style="color: var(--accent-blue);">💰</i>
+                </div>
+                <div class="form-group">
+                    <label for="chuviscos-val">Total de Chuvisco\$:</label>
+                    <input type="number" id="chuviscos-val" value="50" min="0" style="font-size: 1.4rem; color: var(--accent-blue); text-align: center;">
+                </div>
+                <p style="font-size: 0.82rem; color: #555; text-align: center;">Gotas de chuva mágica cristalizada usadas para comprar poções, equipamentos e itens na feira de Vila Velha!</p>
+            </div>
+        </div>
+
+        <!-- CARTAS DE TESOURO NO INVENTÁRIO DA BOLSA -->
+        <div class="card">
+            <div class="card-header">
+                <span>📦 Cartas de Tesouro na Bolsa</span>
+                <i>👑</i>
+            </div>
+            <p style="font-size: 0.85rem; margin-bottom: 12px;">Selecione os itens dos Baús de Madeira, Ferro e Ouro que seu herói carrega na bolsa (respeitando o limite do atributo Bolsa):</p>
+            
+            <div id="treasure-slots-container">
+                <!-- Gerado via JS de acordo com a Bolsa -->
+            </div>
+            <button class="btn" style="margin-top: 10px;" onclick="addTreasureSlot()">+ Adicionar Espaço na Bolsa</button>
+        </div>
+
+        <!-- MOCHILA DE EQUIPAMENTOS E ANOTAÇÕES -->
+        <div class="card">
+            <div class="card-header">
+                <span>🎒 Mochila de Equipamentos & Itens da Aventura</span>
+                <i>🛠️</i>
+            </div>
+            <div class="form-group">
+                <label for="mochila-texto">Itens, Armas de Reserva, Ferramentas e Recursos Gerais:</label>
+                <textarea id="mochila-texto" rows="4" placeholder="Ex: Corda (1m), Cantil de Couro, Tocha Especial, Ração, Kit de Primeiros Socorros..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="anotacoes-texto">Diário de Aventura & Anotações de Missão:</label>
+                <textarea id="anotacoes-texto" rows="3" placeholder="Anote aqui pistas, nomes de moradores amigáveis, tarefas dadas pelo Mago Zaimen e objetivos de vida do seu herói..."></textarea>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p><strong>Faz de Conta RPG</strong> • Sistema criado por Neemias de Oliveira Guimarães</p>
+        <p style="margin-top: 4px; font-size: 0.78rem;">Ficha Digital Responsiva Integrada ao Livro de Regras Oficial e ao Escudo do Mestre.</p>
+    </footer>
+
+    <!-- LÓGICA EM JAVASCRIPT NATIVO (100% FUNCIONAL E AUTO-CONTIDO) -->
+    <script>
+        /* ====================================================== */
+        /* BANCO DE DADOS DAS 24 CLASSES OFICIAIS DE FAZ DE CONTA */
+        /* ====================================================== */
+        const PRESET_CLASSES = {
+            guerreiro: {
+                className: "O Guerreiro",
+                hp: 5,
+                forca: 3,
+                defesa: 2,
+                inteligencia: 1,
+                bolsa: 3,
+                pericia: "Espada Longa",
+                alcance: 1,
+                especial: "+1 ponto em Força para ataques contra inimigos que não voam."
+            },
+            amazona: {
+                className: "A Amazona",
+                hp: 5,
+                forca: 3,
+                defesa: 2,
+                inteligencia: 1,
+                bolsa: 3,
+                pericia: "Lâminas Agilizadas",
+                alcance: 1,
+                especial: "Liderança: Concede +1 na Defesa de um aliado vizinho por 1 turno."
+            },
+            mago: {
+                className: "O Mago",
+                hp: 4,
+                forca: 1,
+                defesa: 2,
+                inteligencia: 4,
+                bolsa: 3,
+                pericia: "Poder Elemental (Fogo/Água/Luz)",
+                alcance: 3,
+                especial: "Revela inimigos ocultos, armadilhas e passagens secretas na sala."
+            },
+            elementalista: {
+                className: "A Elementalista",
+                hp: 4,
+                forca: 1,
+                defesa: 2,
+                inteligencia: 4,
+                bolsa: 3,
+                pericia: "Canalização Elemental",
+                alcance: 3,
+                especial: "Seu ataque mágico causa 2 de dano se rolar 1 no teste de Inteligência."
+            },
+            arqueiro: {
+                className: "O Arqueiro",
+                hp: 4,
+                forca: 2,
+                defesa: 2,
+                inteligencia: 2,
+                bolsa: 3,
+                pericia: "Arco e Flecha",
+                alcance: 4,
+                especial: "+1 ponto em Força para ataques à distância contra alvos que voam."
+            },
+            cacadora: {
+                className: "A Caçadora",
+                hp: 4,
+                forca: 2,
+                defesa: 2,
+                inteligencia: 2,
+                bolsa: 3,
+                pericia: "Besta de Precisão",
+                alcance: 3,
+                especial: "Rastreio: Não cai em armadilhas e pode refazer 1 teste falho por turno."
+            },
+            barbaro: {
+                className: "O Bárbaro",
+                hp: 6,
+                forca: 4,
+                defesa: 1,
+                inteligencia: 1,
+                bolsa: 2,
+                pericia: "Machado Duplo",
+                alcance: 1,
+                especial: "Ataque Furioso: Causa 2 pontos de dano se for o primeiro a atacar."
+            },
+            druida: {
+                className: "A Druida",
+                hp: 4,
+                forca: 2,
+                defesa: 2,
+                inteligencia: 3,
+                bolsa: 3,
+                pericia: "Garras / Magia da Floresta",
+                alcance: 1,
+                especial: "Transformação Animal: Assume forma de Urso/Lobo ganhando +1 de Força."
+            },
+            monge: {
+                className: "O Monge",
+                hp: 5,
+                forca: 3,
+                defesa: 3,
+                inteligencia: 1,
+                bolsa: 2,
+                pericia: "Artes Marciais (Soco/Chute)",
+                alcance: 1,
+                especial: "Esquiva Perfeita: Contra-ataca sempre que um inimigo falha ao lhe atacar."
+            },
+            alquimista: {
+                className: "A Alquimista",
+                hp: 4,
+                forca: 1,
+                defesa: 2,
+                inteligencia: 4,
+                bolsa: 4,
+                pericia: "Frascos Explosivos / Poções",
+                alcance: 3,
+                especial: "Pode carregar +1 Carta de Tesouro de Poção na Bolsa."
+            },
+            aventureiro: {
+                className: "O Aventureiro",
+                hp: 5,
+                forca: 2,
+                defesa: 2,
+                inteligencia: 2,
+                bolsa: 4,
+                pericia: "Espada Curta / Chicote",
+                alcance: 1,
+                especial: "Ganha 2 Cartas de Tesouro ao derrotar inimigos Operários."
+            },
+            exploradora: {
+                className: "A Exploradora",
+                hp: 4,
+                forca: 2,
+                defesa: 2,
+                inteligencia: 3,
+                bolsa: 4,
+                pericia: "Pico de Escalada / Facão",
+                alcance: 1,
+                especial: "Salta até 3 quadrados evitando buracos, água e armadilhas do solo."
+            },
+            bardo: {
+                className: "O Bardo",
+                hp: 4,
+                forca: 1,
+                defesa: 2,
+                inteligencia: 3,
+                bolsa: 3,
+                pericia: "Alaúde Mágico / Sonoro",
+                alcance: 3,
+                especial: "Canção de Encorajamento: Recupera 1 PV de um aliado ao derrotar inimigo."
+            },
+            dancarina: {
+                className: "A Dançarina",
+                hp: 4,
+                forca: 2,
+                defesa: 3,
+                inteligencia: 2,
+                bolsa: 3,
+                pericia: "Fitas Cortantes / Passos",
+                alcance: 1,
+                especial: "+1 ponto em Defesa contra ataques recebidos a 1 quadrado de distância."
+            },
+            paladino: {
+                className: "O Paladino",
+                hp: 5,
+                forca: 3,
+                defesa: 3,
+                inteligencia: 1,
+                bolsa: 2,
+                pericia: "Espada Sagrada e Martelo",
+                alcance: 1,
+                especial: "Luz de Cura: Recupera 1 PV seu ou de um aliado quando rola 6 na Defesa."
+            },
+            defensora: {
+                className: "A Defensora",
+                hp: 6,
+                forca: 2,
+                defesa: 4,
+                inteligencia: 1,
+                bolsa: 2,
+                pericia: "Lança e Escudo de Aço",
+                alcance: 2,
+                especial: "Barreira Inabalável: Pode bloquear o dano de um ataque direcionado a um aliado vizinho."
+            },
+            domador: {
+                className: "O Domador",
+                hp: 4,
+                forca: 2,
+                defesa: 2,
+                inteligencia: 2,
+                bolsa: 3,
+                pericia: "Comando Animal / Lança",
+                alcance: 2,
+                especial: "Companheiro Animal: Começa o jogo acompanhado de um pet (3 PVs)."
+            },
+            fazendeira: {
+                className: "A Fazendeira",
+                hp: 5,
+                forca: 2,
+                defesa: 2,
+                inteligencia: 2,
+                bolsa: 4,
+                pericia: "Foice / Rastrillo",
+                alcance: 1,
+                especial: "Recursos Naturais: Consegue encontrar alimentos que recuperam 1 PV para a equipe."
+            },
+            engenhoqueiro: {
+                className: "O Engenhoqueiro",
+                hp: 4,
+                forca: 2,
+                defesa: 2,
+                inteligencia: 3,
+                bolsa: 4,
+                pericia: "Chave Inglesa / Disparador",
+                alcance: 2,
+                especial: "Reparo Rápido: Conserta pontes, mecanismos e desarma armadilhas automaticamente."
+            },
+            inventora: {
+                className: "A Inventora",
+                hp: 4,
+                forca: 1,
+                defesa: 3,
+                inteligencia: 4,
+                bolsa: 4,
+                pericia: "Geringonça Mecânica",
+                alcance: 3,
+                especial: "Cadeira Adaptada: Ignora penalidades de terreno difícil e anda +2 quadrados."
+            },
+            samurai: {
+                className: "O Samurai",
+                hp: 5,
+                forca: 3,
+                defesa: 2,
+                inteligencia: 2,
+                bolsa: 2,
+                pericia: "Katana Afiada",
+                alcance: 1,
+                especial: "Corte Preciso: Ignora a defesa de Insetos Soldados no primeiro golpe."
+            },
+            ninja: {
+                className: "A Ninja",
+                hp: 4,
+                forca: 2,
+                defesa: 2,
+                inteligencia: 2,
+                bolsa: 3,
+                pericia: "Shurikens de Arremesso",
+                alcance: 4,
+                especial: "Passos de Sombra: Pode se mover 1 vez sem provocar reação dos inimigos."
+            },
+            vigilante: {
+                className: "O Vigilante",
+                hp: 5,
+                forca: 3,
+                defesa: 3,
+                inteligencia: 2,
+                bolsa: 2,
+                pericia: "Bastão Sentido Aguçado",
+                alcance: 1,
+                especial: "Audição Apurada: Não pode ser pego por ataques surpresa e percebe sombras."
+            },
+            fada: {
+                className: "A Fada",
+                hp: 4,
+                forca: 1,
+                defesa: 2,
+                inteligencia: 4,
+                bolsa: 3,
+                pericia: "Varinha Encantada / Luz",
+                alcance: 3,
+                especial: "Voo com Asas: Ignora buracos no solo e pode recuperar 1 PV com brilho mágico."
+            }
+        };
+
+        // VARIÁVEIS GLOBAIS DE ESTADO
+        let maxHP = 5;
+        let currentHP = 5;
+
+        // INICIALIZAÇÃO AO CARREGAR A PÁGINA
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHearts();
+            updateXPTitle();
+            renderTreasureSlots();
+            loadSavedData();
+        });
+
+        /* ====================================================== */
+        /* GERENCIAMENTO DE VIDA E CORAÇÕES INTERATIVOS          */
+        /* ====================================================== */
+        function renderHearts() {
+            const container = document.getElementById('hearts-container');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= maxHP; i++) {
+                const heartSpan = document.createElement('span');
+                heartSpan.className = 'heart';
+                heartSpan.innerHTML = i <= currentHP ? '❤️' : '🖤';
+                heartSpan.title = `Ponto de Vida ${i}`;
+                heartSpan.onclick = () => setLife(i);
+                container.appendChild(heartSpan);
+            }
+
+            document.getElementById('life-text-display').innerText = `${currentHP} / ${maxHP}`;
+        }
+
+        function setLife(val) {
+            currentHP = val;
+            if (currentHP < 0) currentHP = 0;
+            if (currentHP > maxHP) currentHP = maxHP;
+            renderHearts();
+        }
+
+        function modifyLife(delta) {
+            setLife(currentHP + delta);
+        }
+
+        /* ====================================================== */
+        /* ATRIBUTOS & CONTADORES                                 */
+        /* ====================================================== */
+        function changeAttr(id, delta) {
+            const input = document.getElementById(id);
+            let val = parseInt(input.value) || 1;
+            val += delta;
+            if (val < 1) val = 1;
+            if (val > 6) val = 6;
+            input.value = val;
+
+            if (id === 'bolsa-max') {
+                renderTreasureSlots();
+            }
+        }
+
+        /* ====================================================== */
+        /* CARREGADOR DE CLASSES PRÉ-DEFINIDAS                    */
+        /* ====================================================== */
+        function loadPresetClass() {
+            const key = document.getElementById('preset-class-select').value;
+            if (!key || !PRESET_CLASSES[key]) return;
+
+            const data = PRESET_CLASSES[key];
+            document.getElementById('char-class').value = data.className;
+            document.getElementById('attr-forca').value = data.forca;
+            document.getElementById('attr-defesa').value = data.defesa;
+            document.getElementById('attr-inteligencia').value = data.inteligencia;
+            document.getElementById('bolsa-max').value = data.bolsa;
+            document.getElementById('pericia-nome').value = data.pericia;
+            document.getElementById('pericia-alcance').value = data.alcance;
+            document.getElementById('especial-desc').value = data.especial;
+
+            maxHP = data.hp;
+            currentHP = data.hp;
+            renderHearts();
+            renderTreasureSlots();
+        }
+
+        /* ====================================================== */
+        /* ROLADOR DE DADOS DA FICHA                              */
+        /* ====================================================== */
+        function rollD6(numDice) {
+            let total = 0;
+            let rolls = [];
+            for (let i = 0; i < numDice; i++) {
+                let r = Math.floor(Math.random() * 6) + 1;
+                rolls.push(r);
+                total += r;
+            }
+
+            const output = document.getElementById('dice-result-output');
+            if (numDice === 1) {
+                output.innerText = `Rolou: ${total}`;
+            } else {
+                output.innerText = `Total: ${total} (${rolls.join(' + ')})`;
+            }
+        }
+
+        /* ====================================================== */
+        /* TITULOS DE XP (TABELA OFICIAL PAG. 33)                 */
+        /* ====================================================== */
+        function updateXPTitle() {
+            const xp = parseInt(document.getElementById('xp-total').value) || 0;
+            let title = "Iniciante de Vila Velha";
+
+            if (xp >= 300) title = "👑 Lenda de Faz de Conta (Dano 3)";
+            else if (xp >= 256) title = "⚡ Destruidor de Insetos";
+            else if (xp >= 207) title = "🗣️ Voz da Esperança";
+            else if (xp >= 168) title = "🎁 Salvador Generoso";
+            else if (xp >= 139) title = "🛡️ Protetor da Paz";
+            else if (xp >= 100) title = "🎨 Aventureiro Criativo (Dano 2)";
+            else if (xp >= 81) title = "🧭 Companheiro de Jornada";
+            else if (xp >= 62) title = "🐾 Amigo dos Animais";
+            else if (xp >= 43) title = "🌟 Protetor dos Mais Fracos";
+            else if (xp >= 24) title = "⛏️ Desbravador de Cavernas";
+            else if (xp >= 15) title = "🌲 Defensor da Floresta";
+            else if (xp >= 6) title = "🛡️ Guardião da Vila";
+
+            document.getElementById('xp-title-display').innerText = title;
+        }
+
+        /* ====================================================== */
+        /* GERENCIADOR DE ESPAÇOS NA BOLSA DE CARTAS DE TESOURO   */
+        /* ====================================================== */
+        function renderTreasureSlots() {
+            const count = parseInt(document.getElementById('bolsa-max').value) || 3;
+            const container = document.getElementById('treasure-slots-container');
+            
+            // Mantém valores existentes
+            const existingValues = [];
+            document.querySelectorAll('.treasure-select').forEach(sel => {
+                existingValues.push(sel.value);
+            });
+
+            container.innerHTML = '';
+
+            for (let i = 0; i < count; i++) {
+                const div = document.createElement('div');
+                div.className = 'treasure-card-slot madeira';
+                div.innerHTML = `
+                    <label style="font-size:0.8rem; font-weight:bold;">Espaço de Tesouro #${i+1}:</label>
+                    <select class="treasure-select" onchange="styleTreasureSlot(this)">
+                        <option value="">-- Vazio --</option>
+                        <optgroup label="🧪 Baú de Madeira (Poções)">
+                            <option value="pocao_cura">🧪 Poção de Cura (+1 PV)</option>
+                            <option value="pocao_cura_aprimorada">🧪 Poção de Cura Aprimorada (+2 PV)</option>
+                            <option value="pocao_brilhosa">🧪 Poção Brilhosa (+2 Inteligência)</option>
+                            <option value="pocao_cola">🧪 Poção Cola (Imobiliza por 1 turno)</option>
+                        </optgroup>
+                        <optgroup label="📜 Baú de Ferro (Pergaminhos)">
+                            <option value="perg_fogo">📜 Pergaminho de Fogo (1 Dano / Alcance 6)</option>
+                            <option value="perg_destreza">📜 Pergaminho da Destreza (Esquiva Automática)</option>
+                            <option value="perg_invisivel">📜 Pergaminho da Invisibilidade (Invisível 1 turno)</option>
+                            <option value="perg_teleporte">📜 Pergaminho do Teletransporte (Muda de sala)</option>
+                        </optgroup>
+                        <optgroup label="💍 Baú de Ouro (Anéis Mágicos)">
+                            <option value="anel_forca">💍 Anel da Força (+1 Força Permanente)</option>
+                            <option value="anel_xp">💍 Anel da Experiência (+1 XP Extra ao derrotar)</option>
+                        </optgroup>
+                    </select>
+                `;
+                container.appendChild(div);
+
+                const selectEl = div.querySelector('select');
+                if (existingValues[i]) {
+                    selectEl.value = existingValues[i];
+                    styleTreasureSlot(selectEl);
+                }
+            }
+        }
+
+        function styleTreasureSlot(selectEl) {
+            const slot = selectEl.closest('.treasure-card-slot');
+            const val = selectEl.value;
+            slot.classList.remove('madeira', 'ferro', 'ouro');
+
+            if (val.startsWith('perg_')) slot.classList.add('ferro');
+            else if (val.startsWith('anel_')) slot.classList.add('ouro');
+            else slot.classList.add('madeira');
+        }
+
+        function addTreasureSlot() {
+            const input = document.getElementById('bolsa-max');
+            input.value = (parseInt(input.value) || 0) + 1;
+            renderTreasureSlots();
+        }
+
+        /* ====================================================== */
+        /* SALVAMENTO, EXPORTAÇÃO E IMPORTAÇÃO EM LOCALSTORAGE / JSON */
+        /* ====================================================== */
+        function getCharacterData() {
+            const treasureValues = [];
+            document.querySelectorAll('.treasure-select').forEach(sel => {
+                treasureValues.push(sel.value);
+            });
+
+            return {
+                charName: document.getElementById('char-name').value,
+                playerName: document.getElementById('player-name').value,
+                charClass: document.getElementById('char-class').value,
+                maxHP: maxHP,
+                currentHP: currentHP,
+                forca: document.getElementById('attr-forca').value,
+                defesa: document.getElementById('attr-defesa').value,
+                inteligencia: document.getElementById('attr-inteligencia').value,
+                bolsaMax: document.getElementById('bolsa-max').value,
+                periciaNome: document.getElementById('pericia-nome').value,
+                periciaAlcance: document.getElementById('pericia-alcance').value,
+                especialDesc: document.getElementById('especial-desc').value,
+                xpTotal: document.getElementById('xp-total').value,
+                chuviscos: document.getElementById('chuviscos-val').value,
+                treasures: treasureValues,
+                mochila: document.getElementById('mochila-texto').value,
+                anotacoes: document.getElementById('anotacoes-texto').value
+            };
+        }
+
+        function loadCharacterData(data) {
+            if (!data) return;
+            document.getElementById('char-name').value = data.charName || '';
+            document.getElementById('player-name').value = data.playerName || '';
+            document.getElementById('char-class').value = data.charClass || '';
+            
+            maxHP = data.maxHP || 5;
+            currentHP = data.currentHP !== undefined ? data.currentHP : 5;
+            renderHearts();
+
+            document.getElementById('attr-forca').value = data.forca || 3;
+            document.getElementById('attr-defesa').value = data.defesa || 2;
+            document.getElementById('attr-inteligencia').value = data.inteligencia || 2;
+            document.getElementById('bolsa-max').value = data.bolsaMax || 3;
+            
+            document.getElementById('pericia-nome').value = data.periciaNome || '';
+            document.getElementById('pericia-alcance').value = data.periciaAlcance || 1;
+            document.getElementById('especial-desc').value = data.especialDesc || '';
+            
+            document.getElementById('xp-total').value = data.xpTotal || 0;
+            updateXPTitle();
+
+            document.getElementById('chuviscos-val').value = data.chuviscos || 50;
+            
+            renderTreasureSlots();
+            if (data.treasures && Array.isArray(data.treasures)) {
+                const selects = document.querySelectorAll('.treasure-select');
+                selects.forEach((sel, idx) => {
+                    if (data.treasures[idx]) {
+                        sel.value = data.treasures[idx];
+                        styleTreasureSlot(sel);
+                    }
+                });
+            }
+
+            document.getElementById('mochila-texto').value = data.mochila || '';
+            document.getElementById('anotacoes-texto').value = data.anotacoes || '';
+        }
+
+        function saveCharacter() {
+            const data = getCharacterData();
+            localStorage.setItem('faz_de_conta_ficha', JSON.stringify(data));
+            alert('✨ Ficha salva no navegador com sucesso!');
+        }
+
+        function loadSavedData() {
+            const saved = localStorage.getItem('faz_de_conta_ficha');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    loadCharacterData(data);
+                } catch (e) {
+                    console.warn('Erro ao carregar dados salvos', e);
+                }
+            }
+        }
+
+        function exportJSON() {
+            const data = getCharacterData();
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ficha_${data.charName || 'heroi'}_fazdeconta.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function triggerImport() {
+            document.getElementById('import-file').click();
+        }
+
+        function importJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    loadCharacterData(data);
+                    alert('📥 Ficha importada com sucesso!');
+                } catch (err) {
+                    alert('❌ Erro ao ler o arquivo JSON selecionado.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetForm() {
+            if (confirm('Tem certeza que deseja limpar toda a ficha?')) {
+                localStorage.removeItem('faz_de_conta_ficha');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+
+</html>
